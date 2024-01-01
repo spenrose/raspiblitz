@@ -921,6 +921,41 @@ do
     fi
   done
 
+    ##################################
+  # MEMPOOL
+  error=""
+  echo "updating mempool"
+  source <(timeout 30s /home/admin/config.scripts/mempool.monitor.sh)
+  if [ "${error}" == "" ]; then
+    /home/admin/_cache.sh set mempool_next_block_fee_first "${mempool_next_block_fee_first}"
+    /home/admin/_cache.sh set mempool_next_block_fee_last "${mempool_next_block_fee_last}"
+    /home/admin/_cache.sh set mempool_next_block_fee_median "${mempool_next_block_fee_median}"
+    /home/admin/_cache.sh set mempool_rec_fee_high "${mempool_rec_fee_high}"
+    /home/admin/_cache.sh set mempool_rec_fee_medium "${mempool_rec_fee_medium}"
+    /home/admin/_cache.sh set mempool_rec_fee_low "${mempool_rec_fee_low}"
+    /home/admin/_cache.sh set mempool_rec_fee_no "${mempool_rec_fee_no}"
+    /home/admin/_cache.sh set mempool_l_block_height "${mempool_l_block_height}"
+    /home/admin/_cache.sh set mempool_l_block_time_ago "${mempool_l_block_time_ago}"
+    /home/admin/_cache.sh set mempool_l_block_first_fee "${mempool_l_block_first_fee}"
+    /home/admin/_cache.sh set mempool_l_block_last_fee "${mempool_l_block_last_fee}"
+    /home/admin/_cache.sh set mempool_l_block_median_fee "${mempool_l_block_median_fee}"
+    /home/admin/_cache.sh set mempool_avg_block_time "${mempool_avg_block_time}"
+  else
+    echo "# ERROR --> ${error}"
+  fi
+
+  ##################################
+  # Bitcoin price
+  error=""
+  echo "updating bitcoin price"
+  source <(timeout 30s /home/admin/config.scripts/mempool.monitor.sh)
+  if [ "${error}" == "" ]; then
+    /home/admin/_cache.sh set btc_price "${btc_price}"
+    /home/admin/_cache.sh set btc_24h_price_change_percent "${btc_24h_price_change_percent}"
+  else
+    echo "# ERROR --> ${error}"
+  fi
+
   ##################################
   # DEFAULT & SUMMARIZED SYNC STATUS
 

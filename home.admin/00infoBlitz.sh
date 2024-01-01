@@ -32,6 +32,7 @@ source <(/home/admin/_cache.sh get \
   BTCRPCexplorer \
   joinmarket \
   blitzapi \
+  mempoolExplorer \
 )
 
 # PARAMETER 1: forcing view on a given network
@@ -122,10 +123,10 @@ if [ "${value}" != "" ]; then
 fi
 
 # construct blockinfo string
-if [ "${btc_blocks_behind}" == "" ]; then 
+if [ "${btc_blocks_behind}" == "" ]; then
   sync="WAIT"
   sync_color="${color_yellow}"
-elif [ ${btc_blocks_behind} -lt 2 ]; then 
+elif [ ${btc_blocks_behind} -lt 2 ]; then
   sync="OK"
   sync_color="${color_green}"
 else
@@ -324,30 +325,111 @@ if [ "${vm}" == "1" ]; then
 else
     temp_info="temp ${system_temp_celsius}°C ${system_temp_fahrenheit}°F"
 fi
+# datetime=$(date -R)
+function box()
+{
+  local s=("$@") b w
+  for l in "${s[@]}"; do
+    ((w<${#l})) && { b="$l"; w="${#l}"; }
+  done
+  local line1=$(printf "╔${b//?/═}══╗")
+  local line2=$(printf "║ %*s ║" "-${w}" "${s[0]}")
+  local line3=$(printf "║ %*s ║" "-${w}" "${s[1]}")
+  local line4=$(printf "║ %*s ║" "-${w}" "${s[2]}")
+  local line5=$(printf "╚${b//?/═}══╝")
+  result=("${line1}" "${line2}" "${line3}" "${line4}" "${line5}")
+}
+
+header=""
+next_block=""
+last_block=""
+mempool_high_pri=""
+mempool_medium_pri=""
+mempool_low_pri=""
+mempool_no_pri=""
+if [ "${mempoolExplorer}" = "on" ];then
+  source <(/home/admin/_cache.sh meta mempool_next_block_fee_first)
+  mempool_next_block_fee_first="${value}"
+  source <(/home/admin/_cache.sh meta mempool_next_block_fee_last)
+  mempool_next_block_fee_last="${value}"
+  source <(/home/admin/_cache.sh meta mempool_next_block_fee_median)
+  mempool_next_block_fee_median="${value}"
+  source <(/home/admin/_cache.sh meta mempool_rec_fee_high)
+  mempool_rec_fee_high="${value}"
+  source <(/home/admin/_cache.sh meta mempool_rec_fee_medium)
+  mempool_rec_fee_medium="${value}"
+  source <(/home/admin/_cache.sh meta mempool_rec_fee_low)
+  mempool_rec_fee_low="${value}"
+  source <(/home/admin/_cache.sh meta mempool_rec_fee_no)
+  mempool_rec_fee_no="${value}"
+  source <(/home/admin/_cache.sh meta mempool_l_block_height)
+  mempool_l_block_height="${value}"
+  source <(/home/admin/_cache.sh meta mempool_l_block_time_ago)
+  mempool_l_block_time_ago="${value}"
+  source <(/home/admin/_cache.sh meta mempool_l_block_first_fee)
+  mempool_l_block_first_fee="${value}"
+  source <(/home/admin/_cache.sh meta mempool_l_block_last_fee)
+  mempool_l_block_last_fee="${value}"
+  source <(/home/admin/_cache.sh meta mempool_l_block_median_fee)
+  mempool_l_block_median_fee="${value}"
+  source <(/home/admin/_cache.sh meta mempool_avg_block_time)
+  mempool_avg_block_time="${value}"
+
+  header="  Next Block"
+  box "~${mempool_next_block_fee_median} sat/vB" "${mempool_next_block_fee_first} - ${mempool_next_block_fee_last} sat/vB" "in ~${mempool_avg_block_time} minutes"
+  next_block=("${result[@]}")
+
+  header=$(printf "%s %*s" "${header}" "$((${#next_block[0]} + 2))" "${mempool_l_block_height}")
+  box "~${mempool_l_block_median_fee} sat/vB" "${mempool_l_block_first_fee} - ${mempool_l_block_last_fee} sat/vB" "~${mempool_l_block_time_ago}"
+  last_block=("${result[@]}")
+
+  header=$(printf "%s %*s" "${header}" "$((${#last_block[0]} + 6))" "Priority")
+
+  mempool_high_pri="High   ${mempool_rec_fee_high}"
+  mempool_medium_pri="Medium ${mempool_rec_fee_medium}"
+  mempool_low_pri="Low    ${mempool_rec_fee_low}"
+  mempool_no_pri="No     ${mempool_rec_fee_no}"
+fi
+
+source <(/home/admin/_cache.sh meta btc_price)
+btc_price="${value}"
+source <(/home/admin/_cache.sh meta btc_24h_price_change_percent)
+btc_24h_price_change_percent="${value}"
+
+if [[ $btc_24h_price_change_percent < "0" ]]; then
+  change_arrow="↑"
+  price_color=${color_green}
+else
+  change_arrow="↓"
+  price_color=${color_red}
+fi
+
+btc_price_line="\$${btc_price}"
+btc_price_change="${price_color}${change_arrow} ${btc_24h_price_change_percent}%%"
 
 stty sane
 sleep 1
 clear
 
 printf "
-${color_yellow}
-${color_yellow}
-${color_yellow}
-${color_yellow}               ${color_amber}%s ${color_green} ${ln_alias} ${upsInfo}
-${color_yellow}               ${color_gray}${network^} Fullnode${LNinfo} ${torInfo}
-${color_yellow}        ,/     ${color_yellow}%s
-${color_yellow}      ,'/      ${color_gray}%s
-${color_yellow}    ,' /       ${color_gray}%s ${temp_info}
-${color_yellow}  ,'  /_____   ${color_gray}Free Mem ${color_ram}${ram} ${color_gray} HDD ${color_hdd}%s${color_gray}
-${color_yellow},'_____    ,'  ${color_gray}SSH admin@${internet_localip}${color_gray} d${internet_rx} u${internet_tx}
-${color_yellow}      /  ,'    ${color_gray}${webuiinfo} 
-${color_yellow}     / ,'      ${color_gray}${network} ${color_green}${networkVersion}${color_gray}${chain}net ${networkConnectionsInfo}
-${color_yellow}    /,'        ${color_gray}${blockInfo} %s
-${color_yellow}   /'          ${color_gray}
-${color_yellow}               ${color_gray}${LNline}
-${color_yellow}               ${color_gray}${ln_channelInfo} ${ln_peersInfo}
-${color_yellow}               ${color_gray}${ln_feeReport}
-$lastLine
+${color_amber}     █ █       ${color_amber}%s ${color_green} ${ln_alias} ${upsInfo}
+${color_amber} ██████████    ${color_gray}${network^} Fullnode${LNinfo} ${torInfo}
+${color_amber}   ███   ███   ${color_yellow}%s
+${color_amber}   ███ ████    ${color_gray}%s
+${color_amber}   ███   ███   ${color_gray}%s, ${temp_info}
+${color_amber}   ███   ████  ${color_gray}Free Mem ${color_ram}${ram} ${color_gray} HDDuse ${color_hdd}%s${color_gray}
+${color_amber} ███████████   ${color_gray}SSH admin@${internet_localip}${color_gray} d${internet_rx} u${internet_tx}
+${color_amber}     █ █       ${color_gray}${webuiinfo}
+${color_amber}               ${color_gray}${network} ${color_green}${networkVersion}${color_gray}${chain}net ${networkConnectionsInfo}
+${color_gray}   ${color_gray}${btc_price_line}     ${color_gray}${blockInfo} %s
+${color_gray}   ${btc_price_change}
+${color_gray}
+${color_gray}${header}
+${next_block[0]}       ${last_block[0]}
+${next_block[1]}   ░   ${last_block[1]}   ░   ${mempool_high_pri}
+${next_block[2]}   ░   ${last_block[2]}   ░   ${mempool_medium_pri}
+${next_block[3]}   ░   ${last_block[3]}   ░   ${mempool_low_pri}
+${next_block[4]}       ${last_block[4]}
 " \
 "RaspiBlitz ${codeVersion}-${codeRelease}" \
 "-------------------------------------------" \
