@@ -396,7 +396,8 @@ btc_price="${value}"
 source <(/home/admin/_cache.sh meta btc_24h_price_change_percent)
 btc_24h_price_change_percent="${value}"
 
-if [[ $btc_24h_price_change_percent < "0" ]]; then
+is_positive=$(echo "$btc_24h_price_change_percent >= 0" | bc -l)
+if [[ $is_positive -eq 1 ]]; then
   change_arrow="↑"
   price_color=${color_green}
 else
