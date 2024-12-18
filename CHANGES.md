@@ -7,6 +7,11 @@ Features:
 - Update: Specter Desktop 2.0.5 [details](https://github.com/cryptoadvance/specter-desktop/releases/tag/v2.0.5)
 - Update: Fulcrum Electrum server v1.11.1 (CLI install script with status menu) [details](https://github.com/cculianu/Fulcrum/releases/tag/v1.11.1)
 
+## What's new in Version 1.11.4 of RaspiBlitz?
+
+Small AlbyHub feature release with security/bug-fixing relevant updates.
+
+- Update: LND v0.18.3-beta [details](https://github.com/lightningnetwork/lnd/releases/tag/v0.18.3-beta)
 
 ## What's new in Version 1.11.3 of RaspiBlitz?
 
