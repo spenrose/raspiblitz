@@ -1,5 +1,7 @@
 ## What's new in Version 1.12.0 of RaspiBlitz?
 
+Work In Progress
+
 Features:
 
 - Update: RaspberryOS arm64 base image 2024-11-19 (Debian 12 Bookworm) [details](https://downloads.raspberrypi.com/raspios_full_arm64/release_notes.txt)
@@ -9,14 +11,22 @@ Features:
 
 ## What's new in Version 1.11.4 of RaspiBlitz?
 
-ReleaseCandidate: https://raspiblitz.fulmo.org/images/raspiblitz-min-v1.11.4rc1-2024-12-18.img.gz 
-
 Small AlbyHub feature release with security/bug-fixing relevant updates.
 
 - New: AlbyHub v1.12.0 (SSH & WebUI) [details](https://github.com/getAlby)
-- New: SSH-Option to tirn on/off LNbits AdminUI [details](https://github.com/raspiblitz/raspiblitz/issues/4876)
+- New: SSH-Option to turn on/off LNbits AdminUI [details](https://github.com/raspiblitz/raspiblitz/issues/4876)
 - Update: LND v0.18.3-beta [details](https://github.com/lightningnetwork/lnd/releases/tag/v0.18.3-beta)
 - Update: Core Lightning v24.11 [details](https://github.com/ElementsProject/lightning/releases/tag/v24.11)
+
+Download RaspberryPi images:
+
+- Minimal:
+https://raspiblitz.fulmo.org/images/raspiblitz-min-v1.11.4-2024-12-24.img.gz<br>
+SHA-256-Checksum: 3d874e8e2518bb9db79df196d1dd7e6d567a0608a3df568cadef87a77b4d3841
+
+- Fatpack:
+https://raspiblitz.fulmo.org/images/raspiblitz-fat-v1.11.4-2024-12-24.img.gz<br>
+SHA-256-Checksum: 31877d0085c20f34bf2bedeeec6bd4abc108595a4b0985d273ddaba2b0fbe654
 
 ## What's new in Version 1.11.3 of RaspiBlitz?
 
@@ -43,12 +53,12 @@ Containing Features:
 
 Download RaspberryPi images:
 
-- Minimal:  
-https://raspiblitz.fulmo.org/images/raspiblitz-min-v1.11.3-2024-11-03.img.gz  
+- Minimal:
+https://raspiblitz.fulmo.org/images/raspiblitz-min-v1.11.3-2024-11-03.img.gz<br>
 SHA-256-Checksum: 199fd4e671a49feb39420156031201c9118121d33ec6f9990fb9724de5be02c4
 
-- Fatpack:  
-https://raspiblitz.fulmo.org/images/raspiblitz-fat-v1.11.3-2024-11-03.img.gz 
+- Fatpack:
+https://raspiblitz.fulmo.org/images/raspiblitz-fat-v1.11.3-2024-11-03.img.gz<br>
 SHA-256-Checksum: 65e523562768b21dcda85b96003c559a665015889402a3cea27638e6c5e290bd
 
 ## What's new in Version 1.11.2 of RaspiBlitz?
