@@ -11,7 +11,7 @@ Adds support for the following:
 
 ## Installation
 
-- Added `mempool.monitor.sh` & `price.monitor.sh` to the `/home/admin/config.scripts`.
+- Added `mempool.monitor.sh` & `price.monitor.sh` to the `/home/admin/config.scripts` and `chmod +x`.
 - Modified `00infoBlitz.sh` and `_background.scan.sh`.
 
 ## 5" LCD screen support

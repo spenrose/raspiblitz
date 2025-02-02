@@ -1,9 +1,26 @@
 #!/usr/bin/env bash
 
-response=$(curl -s -X 'GET' 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true&include_market_cap=true' -H 'acceprt: application/json')
+calc_percent_change() {
+    old_value=$1
+    new_value=$2
 
-price=$(echo "${response}" | jq '.bitcoin.usd' | xargs printf "%'.0f")
-percent_change=$(echo "${response}" | jq '.bitcoin.usd_24h_change')
+    if [ "$(echo "$old_value == 0" | bc)" -eq 1 ]; then
+        echo "Undefined (division by zero)"
+        return
+    fi
+
+    change=$(echo "scale=4; (($new_value - $old_value) / $old_value) * 100" | bc)
+
+    echo "${change}"
+}
+
+response=$(curl -s -X 'GET' 'https://api.exchange.coinbase.com/products/BTC-USD/stats' -H 'Content-Type: application/json')
+
+open_price=$(echo "${response}" | jq '.open' | xargs printf "%.2f")
+raw_price=$(echo "${response}" | jq '.last' | xargs printf "%.2f")
+price=$(echo "${raw_price}" | xargs printf "%'.0f")
+
+percent_change=$(calc_percent_change "${open_price}" "${raw_price}")
 percent_change=$(printf '%01.2f' "${percent_change}")
 
 echo "btc_price='${price}'"

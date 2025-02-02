@@ -948,7 +948,7 @@ do
   # Bitcoin price
   error=""
   echo "updating bitcoin price"
-  source <(timeout 30s /home/admin/config.scripts/mempool.monitor.sh)
+  source <(timeout 30s /home/admin/config.scripts/price.monitor.sh)
   if [ "${error}" == "" ]; then
     /home/admin/_cache.sh set btc_price "${btc_price}"
     /home/admin/_cache.sh set btc_24h_price_change_percent "${btc_24h_price_change_percent}"

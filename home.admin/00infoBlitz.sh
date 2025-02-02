@@ -60,11 +60,26 @@ if [ "${PARAMETER_LIGHTNING}" == "none" ]; then
 fi
 
 # set colors
+color_black='\033[0;30m'
 color_red='\033[0;31m'
 color_green='\033[0;32m'
-color_amber='\033[0;33m'
-color_yellow='\033[1;93m'
-color_gray='\033[0;37m'
+color_yellow='\033[0;33m'
+color_blue='\033[0;34m'
+color_magenta='\033[0;35m'
+color_cyan='\033[0;36m'
+color_white='\033[0;37m'
+color_bright_black='\033[1;30m'
+color_bright_red='\033[1;31m'
+color_bright_green='\033[1;32m'
+color_bright_yellow='\033[1;33m'
+color_bright_blue='\033[1;34m'
+color_bright_magenta='\033[1;35m'
+color_bright_cyan='\033[1;36m'
+color_bright_white='\033[1;37m'
+
+color_amber=${color_yellow}
+color_gray=${color_white}
+color_old_yellow='\033[1;93m'
 
 # generate netprefix
 netprefix=${chain:0:1}
@@ -317,7 +332,8 @@ if [ "${blitzapi}" == "on" ]; then
  webuiinfo="Web Admin --> http://${internet_localip}"
 fi
 
-datetime=$(date +"%d %b %T %z")
+# datetime=$(date +"%d %b %T %z")
+datetime=$(TZ="America/New_York" date +"%Y-%m-%d %H:%M:%S")
 datetime="${datetime} up ${system_up_text}"
 
 if [ "${vm}" == "1" ]; then
@@ -325,7 +341,7 @@ if [ "${vm}" == "1" ]; then
 else
     temp_info="temp ${system_temp_celsius}°C ${system_temp_fahrenheit}°F"
 fi
-# datetime=$(date -R)
+
 function box()
 {
   local s=("$@") b w
@@ -422,7 +438,7 @@ ${color_amber}   ███   ████  ${color_gray}Free Mem ${color_ram}${r
 ${color_amber} ███████████   ${color_gray}SSH admin@${internet_localip}${color_gray} d${internet_rx} u${internet_tx}
 ${color_amber}     █ █       ${color_gray}${webuiinfo}
 ${color_amber}               ${color_gray}${network} ${color_green}${networkVersion}${color_gray}${chain}net ${networkConnectionsInfo}
-${color_gray}   ${color_gray}${btc_price_line}     ${color_gray}${blockInfo} %s
+${color_gray}   ${color_gray}${btc_price_line}    ${color_gray}${blockInfo} %s
 ${color_gray}   ${btc_price_change}
 ${color_gray}
 ${color_gray}${header}
@@ -478,4 +494,3 @@ else
   fi
 
 fi
-
